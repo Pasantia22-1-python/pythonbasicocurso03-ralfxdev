@@ -3,29 +3,29 @@ from setuptools import Command
 import sys
 
 
-clients = 'randy,alexander,'
+clients = ['randy', 'alexander']
 
 
 def create_client(client_name):
     global clients
 
     if client_name not in clients:
-        clients += client_name
-        _add_comma()
+        clients.append(client_name)
     else:
         print('Client already is in the clients list')
 
 
 def read_client():
-    global clients
-    print(clients)
+    for idx, client in enumerate(clients):
+        print('{}: {}'.format(idx, client))
 
 
-def update_client(client_name, updated_client_name):
+def update_client(client_name, updated_name):
     global clients
 
     if client_name in clients:
-        clients = clients.replace(client_name + ',', updated_client_name + ',')
+        index = clients.index(client_name)
+        clients[index] = updated_name
     else:
         _is_not_client()
 
@@ -34,24 +34,17 @@ def delete_client(client_name):
     global clients
 
     if client_name in clients:
-        clients = clients.replace(client_name + ',','')
+        clients.remove(client_name)
     else:
         _is_not_client()
 
 
 def search_client(client_name):
-    clients_list = clients.split(',')
-
-    for client in clients_list:
+    for client in clients:
         if client != client_name:
             continue
         else:
             return True
-
-
-def _add_comma():
-    global clients
-    clients += ',' 
 
 
 def _get_client_name():
@@ -96,8 +89,8 @@ if __name__ == '__main__':
         read_client()
     elif command == 'U':
         client_name = _get_client_name()
-        update_client_name = input('What is the updated client name? ')
-        update_client(client_name, update_client_name)
+        updated_name = input('What is the updated client name? ')
+        update_client(client_name, updated_name)
         read_client()
     elif command == 'D':
         client_name = _get_client_name()
